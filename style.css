@@ -1,0 +1,358 @@
+/* Charity: water Brand Colors & Fonts
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+Fonts:
+- Proxima Nova
+- Avenir
+
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
+  margin: 0;
+  padding: 30px;
+  background-color: #f0f0f0;
+  color: #333;
+  background-image: url('img/charitywater_2048.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+h1, .game-instructions, .stats p, button, .achievement {
+  font-family: 'Montserrat', 'Avenir', 'Proxima Nova', Arial, sans-serif;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 750px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+h1 img {
+  height: 50px;
+  margin-right: 15px;
+  display: block;
+}
+
+.game-instructions {
+  font-size: 18px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+  background-color: #f5f5f5;
+  padding: 15px 0;
+  border-radius: 8px;
+}
+
+.stats p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.grid-cell {
+  background-color: #e8e8e8;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.water-can-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  /* Ensure the wrapper is properly centered */
+}
+
+.water-can {
+  width: 100%;
+  height: 100%;
+  background-image: url('img/water-can.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  border-radius: 50%;
+  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
+  transform-origin: center; /* Ensure scaling happens from the center */
+}
+
+@keyframes popUp {
+  0% {
+    transform: scale(0.5); /* Start scaling from the center */
+  }
+  100% {
+    transform: scale(1); /* End scaling at full size */
+  }
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin: 30px auto 0;
+  transition: background-color 0.2s;
+}
+
+#start-game,
+#reset-game {
+  display: inline-block;
+  margin: 30px auto 0 auto;
+  left: 0;
+  right: 0;
+  position: relative;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+}
+
+#reset-game {
+  display: none;
+}
+
+.achievement {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2E9DF7;
+  margin: 20px 0;
+}
+
+.pop {
+  animation: popScore 0.3s;
+}
+
+@keyframes popScore {
+  0% { transform: scale(1); color: #FFC907; }
+  50% { transform: scale(1.4); color: #4FCB53; }
+  100% { transform: scale(1); color: inherit; }
+}
+
+.flash {
+  animation: flashTimer 0.3s;
+}
+
+@keyframes flashTimer {
+  0% { background: #FFC907; color: #fff; }
+  50% { background: #F5402C; color: #fff; }
+  100% { background: none; color: inherit; }
+}
+
+.cw-logo {
+  display: block;
+  margin: 0 auto 18px auto;
+  max-width: 320px;
+  width: 80%;
+  height: auto;
+}
+
+.cw-logo-fixed {
+  position: fixed;
+  left: 18px;
+  bottom: 18px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  z-index: 100;
+  background: none;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.bg-logo-container {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.bg-cw-logo {
+  position: absolute;
+  left: 24px;
+  bottom: 24px;
+  width: 90px;
+  height: auto;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+body, html {
+  position: relative;
+  min-height: 100vh;
+}
+
+@media (max-width: 900px) {
+  .container {
+    max-width: 95vw;
+    padding: 20px;
+  }
+  .game-grid {
+    max-width: 350px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+    border-radius: 0;
+    margin: 10px auto;
+  }
+  h1 {
+    font-size: 22px;
+  }
+  .grid-cell {
+    min-width: 60px;
+  }
+  .water-can-wrapper {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+.obstacle-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.obstacle {
+  width: 100%;
+  height: 100%;
+  background: url('img/water-can-transparent.png') center/cover no-repeat, #F5402C;
+  border-radius: 50%;
+  border: 3px solid #F5402C;
+  box-shadow: 0 0 10px #F5402C55;
+  opacity: 0.85;
+  cursor: pointer;
+  animation: popUp 0.5s cubic-bezier(0.17, 0.67, 0.34, 2);
+  position: relative;
+}
+
+.obstacle-1 {
+  border-color: #FF902A;
+  box-shadow: 0 0 10px #FF902A88;
+}
+.obstacle-1::after {
+  content: "-1";
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 4px #FF902A;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.obstacle-2 {
+  border-color: #F5402C;
+  box-shadow: 0 0 10px #F5402C55;
+}
+.obstacle-2::after {
+  content: "-2";
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.5rem;
+  text-shadow: 1px 1px 4px #F5402C;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.confetti-container {
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+}
+.confetti {
+  position: absolute;
+  top: -40px;
+  font-size: 2rem;
+  animation: confetti-fall 2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+@keyframes confetti-fall {
+  to {
+    top: 100vh;
+    transform: rotate(360deg) scale(1.2);
+    opacity: 0.7;
+  }
+}
