@@ -11,7 +11,15 @@
   <div class="container">
     <img src="img/cw_logo_horizontal.png" alt="charity: water logo" class="cw-logo" />
     <h1>Water Quest</h1>
-    <p class="game-instructions">Collect 20 items to complete the game!</p>
+    <div class="difficulty-row" style="text-align:center; margin-bottom:18px;">
+      <label for="difficulty-select" style="font-weight:bold; margin-right:8px;">Difficulty:</label>
+      <select id="difficulty-select" style="font-size:1rem; padding:4px 10px; border-radius:6px;">
+        <option value="easy">Easy</option>
+        <option value="normal" selected>Normal</option>
+        <option value="hard">Hard</option>
+      </select>
+    </div>
+    <p class="game-instructions">Collect <span id="goal-cans-label">20</span> items to complete the game!</p>
     <div class="stats">
       <p>Cans Collected: <span id="current-cans">0</span></p>
       <p>Time Left: <span id="timer">30</span>s</p>
@@ -27,5 +35,13 @@
     <img src="img/cw_logo.png" alt="charity: water logo" class="bg-cw-logo" />
   </div>
   <script src="script.js"></script>
+  <footer style="text-align:center; margin-top:40px; padding:18px 0 0 0; font-size:1rem; color:#555;">
+    <hr style="margin-bottom:12px;">
+    <div>
+      <a href="https://www.charitywater.org/main" target="_blank" rel="noopener" style="color:#2E9DF7; font-weight:bold; text-decoration:none; margin-right:18px;">charity: water Website</a>
+      <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener" style="color:#FFC907; font-weight:bold; text-decoration:none;">Donate</a>
+    </div>
+    <div style="margin-top:8px; font-size:0.95em; color:#888;">Support clean water for everyone, everywhere.</div>
+  </footer>
 </body>
 </html>

@@ -1,10 +1,34 @@
 // Game configuration and state variables
-const GOAL_CANS = 20;        // Total items needed to collect
-let currentCans = 0;         // Current number of items collected
-let gameActive = false;      // Tracks if game is currently running
-let spawnInterval;          // Holds the interval for spawning items
-let timerInterval;           // Holds the interval for the timer
-let timeLeft = 30;           // Time left in seconds
+const DIFFICULTY_SETTINGS = {
+  easy:   { goal: 10, time: 40, spawnRate: 1200 },
+  normal: { goal: 20, time: 30, spawnRate: 1000 },
+  hard:   { goal: 25, time: 35, spawnRate: 700 } // Changed goal from 30 to 25
+};
+let currentDifficulty = 'normal';
+let GOAL_CANS = DIFFICULTY_SETTINGS[currentDifficulty].goal;
+let currentCans = 0;
+let gameActive = false;
+let spawnInterval;
+let timerInterval;
+let timeLeft = DIFFICULTY_SETTINGS[currentDifficulty].time;
+let spawnRate = DIFFICULTY_SETTINGS[currentDifficulty].spawnRate;
+
+// Milestone messages for each difficulty
+const MILESTONES = {
+  easy: [
+    { score: 5, message: 'Halfway there!' },
+    { score: 8, message: 'Almost done!' }
+  ],
+  normal: [
+    { score: 10, message: 'Halfway there!' },
+    { score: 15, message: 'Keep going!' }
+  ],
+  hard: [
+    { score: 12, message: 'Halfway there!' },
+    { score: 20, message: 'Almost there!' }
+  ]
+};
+let shownMilestones = [];
 
 // Creates the 3x3 game grid where items will appear
 function createGrid() {
@@ -58,7 +82,9 @@ function spawnWaterCan() {
         const cansElem = document.getElementById('current-cans');
         cansElem.textContent = currentCans;
         animateElement(cansElem, 'flash');
-        randomCell.innerHTML = '';
+        // Visual effect before removal
+        obstacle.classList.add('fade-out');
+        setTimeout(() => { randomCell.innerHTML = ''; }, 250);
       });
     }
   } else {
@@ -75,7 +101,22 @@ function spawnWaterCan() {
         const cansElem = document.getElementById('current-cans');
         cansElem.textContent = currentCans;
         animateElement(cansElem, 'pop');
-        randomCell.innerHTML = '';
+        // Milestone check
+        const milestones = MILESTONES[currentDifficulty];
+        for (const m of milestones) {
+          if (currentCans === m.score && !shownMilestones.includes(m.score)) {
+            document.getElementById('achievements').textContent = m.message;
+            shownMilestones.push(m.score);
+            setTimeout(() => {
+              if (document.getElementById('achievements').textContent === m.message) {
+                document.getElementById('achievements').textContent = '';
+              }
+            }, 1200);
+          }
+        }
+        // Visual effect before removal
+        can.classList.add('fade-out');
+        setTimeout(() => { randomCell.innerHTML = ''; }, 250);
         if (currentCans >= GOAL_CANS) {
           endGame();
           document.getElementById('achievements').textContent = 'You win!';
@@ -88,18 +129,22 @@ function spawnWaterCan() {
 
 // Initializes and starts a new game
 function startGame() {
-  if (gameActive) return; // Prevent starting a new game if one is already active
+  if (gameActive) return;
   gameActive = true;
   document.getElementById('start-game').style.display = 'none';
   document.getElementById('reset-game').style.display = 'inline-block';
   currentCans = 0;
-  timeLeft = 30;
+  timeLeft = DIFFICULTY_SETTINGS[currentDifficulty].time;
+  GOAL_CANS = DIFFICULTY_SETTINGS[currentDifficulty].goal;
+  spawnRate = DIFFICULTY_SETTINGS[currentDifficulty].spawnRate;
+  shownMilestones = [];
   document.getElementById('current-cans').textContent = currentCans;
   document.getElementById('timer').textContent = timeLeft;
   document.getElementById('achievements').textContent = '';
-  createGrid(); // Set up the game grid
-  spawnInterval = setInterval(spawnWaterCan, 1000); // Spawn water cans every second
-  timerInterval = setInterval(updateTimer, 1000); // Start the timer
+  document.getElementById('goal-cans-label').textContent = GOAL_CANS;
+  createGrid();
+  spawnInterval = setInterval(spawnWaterCan, spawnRate);
+  timerInterval = setInterval(updateTimer, 1000);
 }
 
 function updateTimer() {
@@ -128,10 +173,14 @@ function resetGame() {
   clearInterval(spawnInterval);
   clearInterval(timerInterval);
   currentCans = 0;
-  timeLeft = 30;
+  timeLeft = DIFFICULTY_SETTINGS[currentDifficulty].time;
+  GOAL_CANS = DIFFICULTY_SETTINGS[currentDifficulty].goal;
+  spawnRate = DIFFICULTY_SETTINGS[currentDifficulty].spawnRate;
+  shownMilestones = [];
   document.getElementById('current-cans').textContent = currentCans;
   document.getElementById('timer').textContent = timeLeft;
   document.getElementById('achievements').textContent = '';
+  document.getElementById('goal-cans-label').textContent = GOAL_CANS;
   createGrid();
   document.getElementById('start-game').style.display = 'inline-block';
   document.getElementById('reset-game').style.display = 'none';
@@ -166,3 +215,15 @@ function showConfetti() {
 // Set up click handler for the start button
 document.getElementById('start-game').addEventListener('click', startGame);
 document.getElementById('reset-game').addEventListener('click', resetGame);
+
+document.getElementById('difficulty-select').addEventListener('change', function(e) {
+  currentDifficulty = e.target.value;
+  GOAL_CANS = DIFFICULTY_SETTINGS[currentDifficulty].goal;
+  timeLeft = DIFFICULTY_SETTINGS[currentDifficulty].time;
+  spawnRate = DIFFICULTY_SETTINGS[currentDifficulty].spawnRate;
+  document.getElementById('goal-cans-label').textContent = GOAL_CANS;
+  document.getElementById('timer').textContent = timeLeft;
+  if (!gameActive) {
+    resetGame();
+  }
+});
